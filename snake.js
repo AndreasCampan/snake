@@ -1,67 +1,119 @@
-//Chris DeLeon Snake js
-window.onload=function() {
-  canv=document.getElementById("gc");
-  ctx=canv.getContext("2d");
-  document.addEventListener("keydown",keyPush);
-  setInterval(game,1000/15);
-}
-px=py=10;
-gs=tc=20;
-ax=ay=15;
-xv=yv=0;
-trail=[];
-tail = 5;
-function game() {
-  px+=xv;
-  py+=yv;
-  if(px<0) {
-      px= tc-1;
-  }
-  if(px>tc-1) {
-      px= 0;
-  }
-  if(py<0) {
-      py= tc-1;
-  }
-  if(py>tc-1) {
-      py= 0;
-  }
-  ctx.fillStyle="black";
-  ctx.fillRect(0,0,canv.width,canv.height);
+//Initially Chris DeLeon's Snake js
+//Updated to my preferences
 
-  ctx.fillStyle="lime";
-  for(var i=0;i<trail.length;i++) {
-      ctx.fillRect(trail[i].x*gs,trail[i].y*gs,gs-2,gs-2);
-      if(trail[i].x==px && trail[i].y==py) {
-          tail = 5;
-      }
-  }
-  trail.push({x:px,y:py});
-  while(trail.length>tail) {
-  trail.shift();
-  }
-
-  if(ax==px && ay==py) {
-      tail++;
-      ax=Math.floor(Math.random()*tc);
-      ay=Math.floor(Math.random()*tc);
-  }
-  ctx.fillStyle="red";
-  ctx.fillRect(ax*gs,ay*gs,gs-2,gs-2);
+window.onload = function () {
+  canv = document.getElementById("gc");
+  ctx = canv.getContext("2d");
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, canv.width, canv.height);
 }
+
+//initial player position
+let px = 10;
+let py = 10;
+//grid size
+let gridSize = 20;
+let tileCount = 30;
+//initial apple coordinates
+let ax = Math.floor(Math.random() * tileCount);
+let ay = Math.floor(Math.random() * tileCount);
+//snake velocity
+let xv = 0;
+let yv = 0;
+let trail = [{}];
+let snakeLength = 3;
+let dead = 0;
+//Used to identify the setInterval ID
+let intervalID
+
 function keyPush(evt) {
-  switch(evt.keyCode) {
-      case 37:
-          xv=-1;yv=0;
-          break;
-      case 38:
-          xv=0;yv=-1;
-          break;
-      case 39:
-          xv=1;yv=0;
-          break;
-      case 40:
-          xv=0;yv=1;
-          break;
+  switch (evt.keyCode) {
+    case 37:
+      xv = -1; yv = 0;
+      break;
+    case 38:
+      xv = 0; yv = -1;
+      break;
+    case 39:
+      xv = 1; yv = 0;
+      break;
+    case 40:
+      xv = 0; yv = 1;
+      break;
   }
 }
+
+function resetGame(){
+  console.log('Did the game reset')
+  px = 10;
+  py = 10;
+  //grid size
+  gridSize = 20;
+  //tile count
+  tileCount = 30;
+  //apple coordinates
+  ax = Math.floor(Math.random() * tileCount);
+  ay = Math.floor(Math.random() * tileCount);
+  //snake velocity
+  xv = 0;
+  yv = 0;
+  trail = [{}];
+  snakeLength = 3;
+  dead = 0;
+}
+
+function startGame(){
+  document.addEventListener("keydown", keyPush);
+  intervalID = setInterval(Game, 1000 / 15);
+  if(dead == 1){
+    resetGame()
+  }
+}
+
+
+function Game() {
+  if(dead == 1){
+    clearInterval(intervalID)
+  } else {
+    px += xv;
+    py += yv;
+
+    //edges
+    if (px < 0) {
+      dead = 1
+    }
+    if (px == tileCount) {
+      dead = 1
+    }
+    if (py < 0) {
+      dead = 1
+    }
+    if (py == tileCount) {
+      dead = 1
+    }
+
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canv.width, canv.height);
+
+    ctx.fillStyle = "lime";
+    for (let i = 0; i < trail.length; i++) {
+      ctx.fillRect(trail[i].x * gridSize, trail[i].y * gridSize, gridSize - 2, gridSize - 2);
+      if (trail[i].x == px && trail[i].y == py) {
+        snakeLength = 3;
+      }
+    }
+    trail.push({ x: px, y: py });
+    while (trail.length > snakeLength) {
+      trail.shift();
+    }
+
+    if (ax == px && ay == py) {
+      snakeLength++;
+      ax = Math.floor(Math.random() * tileCount);
+      ay = Math.floor(Math.random() * tileCount);
+    }
+    ctx.fillStyle = "red";
+    ctx.fillRect(ax * gridSize, ay * gridSize, gridSize - 2, gridSize - 2);
+  }
+}
+
