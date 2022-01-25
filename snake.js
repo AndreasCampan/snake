@@ -26,20 +26,34 @@ let dead = 0;
 //Used to identify the setInterval ID
 let intervalID
 
-function keyPush(evt) {
-  switch (evt.keyCode) {
-    case 37:
-      xv = -1; yv = 0;
-      break;
-    case 38:
-      xv = 0; yv = -1;
-      break;
-    case 39:
-      xv = 1; yv = 0;
-      break;
-    case 40:
-      xv = 0; yv = 1;
-      break;
+function keyPush(e) {
+  //left
+  if(e.keyCode == 37){
+    if(trail[trail.length-2].x == px - 1){
+      return
+    }
+    xv = -1; yv = 0;
+  }
+  //right
+  if(e.keyCode == 39){
+    if(trail[trail.length-2].x == px + 1){
+      return
+    }
+    xv = 1; yv = 0;
+  }
+  //up
+  if(e.keyCode == 38){
+    if(trail[trail.length-2].y == py - 1){
+      return
+    }
+    xv = 0; yv = -1;
+  }
+  //down
+  if(e.keyCode == 40){
+    if(trail[trail.length-2].y == py + 1){
+      return
+    }
+    xv = 0; yv = 1;
   }
 }
 
@@ -64,7 +78,7 @@ function resetGame(){
 
 function startGame(){
   document.addEventListener("keydown", keyPush);
-  intervalID = setInterval(Game, 1000 / 15);
+  intervalID = setInterval(Game, 150);
   if(dead == 1){
     resetGame()
   }
