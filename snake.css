@@ -1,0 +1,30 @@
+* {
+  box-sizing: border-box;
+}
+
+#start-game {
+  width: 100px;
+}
+
+#score {
+  background-color: black;
+  color: limegreen;
+  width: 600px;
+  padding: 10px;
+  font-size: 1.1em;
+  border-bottom: 1px solid #999999;
+}
+
+#snake-length {
+  padding-left: 5px;
+}
+
+#grid {
+  position:fixed;
+
+  width: 600px;
+  height: 600px;
+  background: repeating-linear-gradient(transparent, transparent 14px, #7a7a7a 15px),
+  repeating-linear-gradient(90deg, transparent, transparent 14px, #7a7a7a 15px);
+  background-size: 600px 600px;
+}
